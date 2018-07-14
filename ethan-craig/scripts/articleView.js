@@ -74,38 +74,50 @@ articleView.setTeasers = () => {
 };
 
 // COMMENT: Where is this function called? Why?
-// PUT YOUR RESPONSE HERE
+// Its called on new.html to connect this js to it and not with our regular
 articleView.initNewArticlePage = () => {
-  // TODO: Ensure the main .tab-content area is revealed. We might add more tabs later or otherwise edit the tab navigation.
+  // TO/DO: Ensure the main .tab-content area is revealed. We might add more tabs later or otherwise edit the tab navigation.
+  $('nav .tab[data-content="write"]').click();
 
-
-  // TODO: The new articles we create will be copy/pasted into our source data file.
+  // TO/DO: The new articles we create will be copy/pasted into our source data file.
   // Set up this "export" functionality. We can hide it for now, and show it once we have data to export.
-
+  $('#article-export').hide();
   $('#article-json').on('focus', function(){
     this.select();
   });
 
-  // TODO: Add an event handler to update the preview and the export field if any inputs change.
-
+  // TO/DO: Add an event handler to update the preview and the export field if any inputs change.
+  $('#new-form').on('change',articleView.create)
 };
 
 articleView.create = () => {
-  // TODO: Set up a variable to hold the new article we are creating.
+  // TO/DO: Set up a variable to hold the new article we are creating.
   // Clear out the #articles element, so we can put in the updated preview
+  let articleDataObj = {};
 
+  articleDataObj.title = $('#article-title').val();
+  articleDataObj.body = $('#article-body').val();
+  articleDataObj.author = $('#article-author').val();
+  articleDataObj.authorUrl = $('#article-author-url').val();
+  articleDataObj.category = $('#article-category').val();
 
-  // TODO: Instantiate an article based on what's in the form fields:
+  var today = new Date();
 
+  var dateString = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`;
+  articleDataObj.publishedOn = $('#article-published').is(':checked') ? dateString : null;
 
-  // TODO: Use our interface to the Handblebars template to put this new article into the DOM:
+  // TO/DO: Instantiate an article based on what's in the form fields:
+  let article = new Article(articleDataObj);
 
+  // TO/DO: Use our interface to the Handblebars template to put this new article into the DOM:
+  $('#articles').empty().append(article.toHtml());
 
-  // TODO: Activate the highlighting of any code blocks; look at the documentation for hljs to see how to do this by placing a callback function in the .each():
+  // TO/DO: Activate the highlighting of any code blocks; look at the documentation for hljs to see how to do this by placing a callback function in the .each():
   $('pre code').each();
 
-  // TODO: Show our export field, and export the new article as JSON, so it's ready to copy/paste into blogArticles.js:
-
+  // TO/DO: Show our export field, and export the new article as JSON, so it's ready to copy/paste into blogArticles.js:
+  $('#article-export').show();
+  $('#article-json').val(JSON.stringify(articleDataObj) + ',');
 };
 
 // COMMENT: Where is this function called? Why?
